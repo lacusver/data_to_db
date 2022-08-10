@@ -4,7 +4,7 @@ Python script can track changes in Google Sheets and update data in the database
 * Script sends a message to telegram bot if delivery date is expired.
 * Script daily gets current exchange rate from the [central bank](http://www.cbr.ru/development/sxml/) and update column price in ₽.
 ## Instructions for running the script:
-1. Clone the repository: `git clone` .
+1. Clone the repository: `git clone https://github.com/lacusver/google-api-sheets-to-db.git` .
 2. Install all requirements `pip install -r requirements.txt`.
 3. Make a copy of [the file in Google Sheets](https://docs.google.com/spreadsheets/d/15OFkjwQBcMkX40YDCZB03pHGQqvOh1dBsPnbTAyFhEs/edit?usp=sharing).
 4. Create a project in Google Cloud Platform.
