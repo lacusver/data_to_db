@@ -2,7 +2,7 @@
 Python script can track changes in Google Sheets and update data in the database.
 * You can `update/delete/add` rows in google sheets file, script will automatically update db in postgres.
 * Script sends a message to telegram bot if delivery date is expired.
-* Script daily gets current exchange rate from CB and update column price_rub.
+* Script daily gets current exchange rate from the [central bank](http://www.cbr.ru/development/sxml/) and update column price_rub.
 ## Instructions for running the script:
 1. Clone the repository: `git clone` .
 2. Install all requirements `pip install -r requirements.txt`.
