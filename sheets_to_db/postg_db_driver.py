@@ -16,7 +16,6 @@ class Database():
 
     @classmethod
     def check_if_db_exists(cls, cursor):
-        # проверяем сущ-ие бд, проверяя список бд в postgres
         sql = f"SELECT datname FROM pg_database;"
         cursor.execute(sql)
         list_database = cursor.fetchall()
@@ -24,8 +23,7 @@ class Database():
 
     @classmethod
     def create_database(cls):
-        # создаем бд, если нет
-        if cls.connection is None: # проверка если мы уже подключились к созданной бд
+        if cls.connection is None:
             try:
                 connection = psycopg2.connect(user=cls.user, 
                         password=cls.password, host=cls.host, port=cls.port)
@@ -43,7 +41,6 @@ class Database():
 
     @classmethod
     def create_table(cls):
-        # создаем таблицу, если не существует
         sql = f"""
                 CREATE TABLE IF NOT EXISTS {cls.TABLE_NAME} 
                 (
@@ -65,7 +62,6 @@ class Database():
 
     @classmethod
     def connect_to_db(cls):
-        # подключаемся к бд
         if cls.connection is None:
             try:
                 cls.connection = psycopg2.connect(dbname=cls.DB_NAME, user=cls.user, 
@@ -78,7 +74,6 @@ class Database():
 
     @classmethod
     def get_data(cls):
-        # получаем данные из бд
         data = []
         sql = f"SELECT {cls.TABLE_COLS[0]}::text, {cls.TABLE_COLS[1]}::text, {cls.TABLE_COLS[2]}::text, TO_CHAR({cls.TABLE_COLS[4]}, 'dd.mm.yyyy') FROM {cls.TABLE_NAME}"
         if cls.connection:
@@ -89,7 +84,6 @@ class Database():
     
     @classmethod
     def add_new_data(cls, rows):
-        # добавляем данные в бд
         sql = f"INSERT INTO {cls.TABLE_NAME} VALUES "
         try:
             args = ','.join(cls.cursor.mogrify("(%s,%s,%s,%s,%s)", (i[0], i[1], i[2], 
@@ -105,7 +99,6 @@ class Database():
 
     @classmethod
     def update_data(cls, rows):
-        # обновляем данные в бд
         sql_query = f"""UPDATE {cls.TABLE_NAME} as t SET
                     {cls.TABLE_COLS[1]} = e.order_num::numeric,
                     {cls.TABLE_COLS[2]} = e.price_d::numeric,
@@ -123,7 +116,6 @@ class Database():
 
     @classmethod
     def delete_rows(cls, rows_indx):
-        # удаляем данные из бд
         if len(rows_indx)==1:
             sql = f"DELETE from {cls.TABLE_NAME} WHERE {cls.TABLE_COLS[0]} = {rows_indx[0]}"
         elif len(rows_indx)>1:
@@ -138,7 +130,6 @@ class Database():
 
     @classmethod
     def update_price(cls):
-        # обновляем колонку с ценой
         sql = f"UPDATE {cls.TABLE_NAME} SET {cls.TABLE_COLS[3]} = {cls.TABLE_COLS[2]} * {exchange_rate.ExchangeRate.get_exchange_rate()};"
         try:
             cls.cursor.execute(sql)
