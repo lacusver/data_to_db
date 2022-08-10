@@ -1,19 +1,19 @@
- 1. Получите ключ для доступа к Google API проекта из гугл диска. Ссылки на гугл диск и таблицу были отправлены в бот. Доступ расшарен на почту указанную в тестовом задании. 
- 2. Скопируйте содержимое в файл creds/creds_api.json.
- 3. Установите необходимые пакеты: `pip install -r requirements.txt`
- 4. Необходимо наличие postgresql в системе.
- 5. Настройте в файле config.py необходимые параметры для работы скрипта:
-    * настройки бд
-    * sheet_id (id расшаренной гугл таблицы)
-    * ваши настройки бота в телеграме (token, chat_id)
- 6. Запустите скрипт main.py. Скрипт создаст базу данных и таблицу к ней. А затем будет отслеживать изменения через revision history google sheets.
- 7. Поля в бд будут следующие и иметь такой порядок:
-     * id —> № (в таблице)
-     * order_id —> заказ №
-     * price_d —> стоимость,$
-     * price_ru —> стоимость ₽
-     * delivery_time —> срок поставки
-
- 8. Колонка price_ru будет обновляться каждый день в соответствие с курсом ЦБ.
- 9. При редактировании данных в google sheets, поля в бд будут обновляться раз в 5сек.
- 10. Раз в сутки будет проверяться дата поставки, если она просрочена и ее id нет в списках отправленных, то будет приходить уведомление в телеграм-бот.
+Transfer google sheets data to PostgreSQL using Google API.
+Python script can track changes in Google Sheets and update data in the database.
+* You can `update/delete/add` rows in google sheets, script will automatically update db in postgres.
+* Script sends a message to telegram bot if delivery date is expired.
+* Script daily gets current exchange rate from CB and update column price_rub.
+Instructions for running the script:
+1. Clone the repository: `git clone` 
+2. Install all requirements `pip install -r requirements.txt`
+3. Make a copy of [the file in Google Sheets](https://docs.google.com/spreadsheets/d/15OFkjwQBcMkX40YDCZB03pHGQqvOh1dBsPnbTAyFhEs/edit?usp=sharing)
+4. Create a project in Google Cloud Platform.
+5. Add Sheets API to your project.
+6. Create a service account and get a json format file with service account key.
+7. Add your service account email to your copy of  google sheets file as Viewer.
+8. Place your service account key in the `creds/creds_api.json` file.
+9. Set the necessary parameters in the config file:
+   + Postgresql db settings
+   + Google sheets id
+   + Your telegram bot settings (token, chat_id)
+10. Run script main.py, it will create a db and a table for it. It will track changes in Google Sheets using revision history of the file. 
